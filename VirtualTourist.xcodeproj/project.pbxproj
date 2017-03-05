@@ -8,20 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		A10E6A0B1E6C735900F0AADE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A0A1E6C735900F0AADE /* AppDelegate.swift */; };
-		A10E6A0D1E6C735900F0AADE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A0C1E6C735900F0AADE /* ViewController.swift */; };
 		A10E6A101E6C735900F0AADE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10E6A0E1E6C735900F0AADE /* Main.storyboard */; };
 		A10E6A121E6C735900F0AADE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10E6A111E6C735900F0AADE /* Assets.xcassets */; };
 		A10E6A151E6C735900F0AADE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10E6A131E6C735900F0AADE /* LaunchScreen.storyboard */; };
+		A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A10E6A071E6C735900F0AADE /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10E6A0A1E6C735900F0AADE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A10E6A0C1E6C735900F0AADE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A10E6A0F1E6C735900F0AADE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A10E6A111E6C735900F0AADE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10E6A141E6C735900F0AADE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A10E6A161E6C735900F0AADE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelLocationsMapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +55,45 @@
 			isa = PBXGroup;
 			children = (
 				A10E6A0A1E6C735900F0AADE /* AppDelegate.swift */,
-				A10E6A0C1E6C735900F0AADE /* ViewController.swift */,
+				A10E6A211E6CB27900F0AADE /* Supporting Files */,
+				A10E6A201E6CB26900F0AADE /* Assets */,
+				A10E6A1F1E6CB26100F0AADE /* Controllers */,
+				A10E6A1E1E6CB25600F0AADE /* Models */,
+			);
+			path = VirtualTourist;
+			sourceTree = "<group>";
+		};
+		A10E6A1E1E6CB25600F0AADE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		A10E6A1F1E6CB26100F0AADE /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		A10E6A201E6CB26900F0AADE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
 				A10E6A0E1E6C735900F0AADE /* Main.storyboard */,
 				A10E6A111E6C735900F0AADE /* Assets.xcassets */,
 				A10E6A131E6C735900F0AADE /* LaunchScreen.storyboard */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		A10E6A211E6CB27900F0AADE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
 				A10E6A161E6C735900F0AADE /* Info.plist */,
 			);
-			path = VirtualTourist;
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,7 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10E6A0D1E6C735900F0AADE /* ViewController.swift in Sources */,
+				A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */,
 				A10E6A0B1E6C735900F0AADE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
