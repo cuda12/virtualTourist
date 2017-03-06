@@ -13,6 +13,11 @@
 		A10E6A151E6C735900F0AADE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10E6A131E6C735900F0AADE /* LaunchScreen.storyboard */; };
 		A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */; };
 		A10E6A241E6CB3E100F0AADE /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A221E6CB3E100F0AADE /* Model.xcdatamodeld */; };
+		A10E6A321E6CBC0F00F0AADE /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A311E6CBC0F00F0AADE /* CoreDataStack.swift */; };
+		A10E6A3B1E6D44D000F0AADE /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A371E6D44D000F0AADE /* Photo+CoreDataClass.swift */; };
+		A10E6A3C1E6D44D000F0AADE /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A381E6D44D000F0AADE /* Photo+CoreDataProperties.swift */; };
+		A10E6A3D1E6D44D000F0AADE /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A391E6D44D000F0AADE /* Pin+CoreDataClass.swift */; };
+		A10E6A3E1E6D44D000F0AADE /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		A10E6A161E6C735900F0AADE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelLocationsMapViewController.swift; sourceTree = "<group>"; };
 		A10E6A231E6CB3E100F0AADE /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		A10E6A311E6CBC0F00F0AADE /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		A10E6A371E6D44D000F0AADE /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A10E6A381E6D44D000F0AADE /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A10E6A391E6D44D000F0AADE /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +68,7 @@
 			children = (
 				A10E6A0A1E6C735900F0AADE /* AppDelegate.swift */,
 				A10E6A211E6CB27900F0AADE /* Supporting Files */,
-				A10E6A201E6CB26900F0AADE /* Assets */,
+				A10E6A201E6CB26900F0AADE /* Views */,
 				A10E6A1F1E6CB26100F0AADE /* Controllers */,
 				A10E6A1E1E6CB25600F0AADE /* Models */,
 			);
@@ -69,6 +79,11 @@
 			isa = PBXGroup;
 			children = (
 				A10E6A221E6CB3E100F0AADE /* Model.xcdatamodeld */,
+				A10E6A311E6CBC0F00F0AADE /* CoreDataStack.swift */,
+				A10E6A371E6D44D000F0AADE /* Photo+CoreDataClass.swift */,
+				A10E6A381E6D44D000F0AADE /* Photo+CoreDataProperties.swift */,
+				A10E6A391E6D44D000F0AADE /* Pin+CoreDataClass.swift */,
+				A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -81,14 +96,14 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
-		A10E6A201E6CB26900F0AADE /* Assets */ = {
+		A10E6A201E6CB26900F0AADE /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				A10E6A0E1E6C735900F0AADE /* Main.storyboard */,
 				A10E6A111E6C735900F0AADE /* Assets.xcassets */,
 				A10E6A131E6C735900F0AADE /* LaunchScreen.storyboard */,
 			);
-			name = Assets;
+			name = Views;
 			sourceTree = "<group>";
 		};
 		A10E6A211E6CB27900F0AADE /* Supporting Files */ = {
@@ -172,8 +187,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10E6A3C1E6D44D000F0AADE /* Photo+CoreDataProperties.swift in Sources */,
+				A10E6A3E1E6D44D000F0AADE /* Pin+CoreDataProperties.swift in Sources */,
+				A10E6A3B1E6D44D000F0AADE /* Photo+CoreDataClass.swift in Sources */,
+				A10E6A3D1E6D44D000F0AADE /* Pin+CoreDataClass.swift in Sources */,
 				A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */,
 				A10E6A0B1E6C735900F0AADE /* AppDelegate.swift in Sources */,
+				A10E6A321E6CBC0F00F0AADE /* CoreDataStack.swift in Sources */,
 				A10E6A241E6CB3E100F0AADE /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +358,7 @@
 				A10E6A1B1E6C735900F0AADE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
