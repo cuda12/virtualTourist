@@ -8,16 +8,40 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class TravelLocationsMapViewController: UIViewController {
 
-    // MARK: members and outlets
+    // MARK: Properties, members and outlets
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var gestureLongPress: UILongPressGestureRecognizer!
     
-    var pinLocations: [CLLocationCoordinate2D]?
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    var pins = [Pin]()      // TODO init with previous stored pins
     var pinNewAnnotation: MKPointAnnotation?
+    
+    // Porperty for fetchedResultsController
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>? {
+        didSet {
+            // whenever the fetchedResultsController changes, perform the fetch and reload the pin annotations
+            fetchedResultsController?.delegate = self
+            
+            do {
+                print("do fetch")
+                try fetchedResultsController?.performFetch()
+            } catch let error as NSError {
+                print("Error while trying to perform a search: \(error)")
+            }
+            
+            self.reloadPins()
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     // MARK: Life cycle
     
@@ -26,16 +50,26 @@ class TravelLocationsMapViewController: UIViewController {
         
         // set default location and zoom if app was used before
         if let prevRegionDict = UserDefaults.standard.dictionary(forKey: "prevRegion") {
-            print(prevRegionDict)
-            
             mapView.setRegion(getMapRegion(fromDict: prevRegionDict as! [String : Double]), animated: true)
         }
         
-        // TODO remove hardcoded pin lcoation
-        pinLocations = [CLLocationCoordinate2D(latitude: 47.410811, longitude: 8.558599)]
-        print(pinLocations!)
-        addPinsToMap()
+        // get the stack
+        let stack = appDelegate.stack
+        
+        // create a fetchrequest
+        let fetchrequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        fetchrequest.sortDescriptors = [NSSortDescriptor(key: "latitude", ascending: true)]
+        
+        // create the FetchResultsController
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchrequest, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        // init prev res
+        if let prevpins = fetchedResultsController!.fetchedObjects as? [Pin] {
+            pins = prevpins
+            reloadPins()
+        }
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -74,27 +108,23 @@ class TravelLocationsMapViewController: UIViewController {
             pinNewAnnotation?.coordinate = coordinats
         
         } else if gestureState == UIGestureRecognizerState.ended {
-            // if finger is lifted add coordinates to pin location collection
+            // if finger is lifted creat new instance of the Pin entity
             
-            // TODO check if collection should not contain annotations and corresponding attributes
-            // if so use function above to create pin
-            pinLocations?.append(coordinats)
+            let _ = Pin(latitude: coordinats.latitude, longitude: coordinats.longitude, title: "Test", context: fetchedResultsController!.managedObjectContext)
         }
-        
     }
     
-
-    func addPinsToMap() {
-        guard let pinLocations = pinLocations else {
-            print("no pin locations available")
-            return
-        }
+    func reloadPins() {
+        print(pins)
+        // remove all annootations to avoid any double annotations
+        mapView.removeAnnotations(mapView.annotations)
         
-        for location in pinLocations {
+        // add all pins
+        for pin in pins {
             let annotation = MKPointAnnotation()
-            annotation.coordinate = location
-            annotation.title = "Pinned Location"
-            
+            annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+            annotation.title = pin.title
+            //annotation.subtitle = pin.creationDaten to do date formater
             mapView.addAnnotation(annotation)
         }
     }
@@ -164,7 +194,39 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
 }
 
 
+// MARK: NSFetchedResultsControllerDelagete methods
 
+extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("controller will change content")
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        print("ns fetched results controller delegate did change method called")
+        
+        // todo switch type to add, remove or insert pins
+        switch type {
+        case .insert:
+            self.pins.insert(anObject as! Pin, at: newIndexPath!.row)
+            print("added new pin \(self.pins)")
+        default:
+            print("TODO")
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("controller did change content")
+        self.reloadPins()
+        
+        do {
+            try self.appDelegate.stack.saveContext()
+        } catch {
+            print("Error during saving")
+        }
+    }
+}
 
 
 

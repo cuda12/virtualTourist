@@ -19,8 +19,8 @@ struct CoreDataStack {
     private let cooridnator: NSPersistentStoreCoordinator
     private let modelUrl: URL
     private let dbUrl: URL
-    private let persistingContext: NSManagedObjectContext
-    private let backgroundContext: NSManagedObjectContext
+    //private let persistingContext: NSManagedObjectContext
+    //private let backgroundContext: NSManagedObjectContext
     let context: NSManagedObjectContext
     
     
@@ -46,14 +46,14 @@ struct CoreDataStack {
         cooridnator = NSPersistentStoreCoordinator(managedObjectModel: model)
         
         // create the contexts and connect them to the coordinator
-        persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        persistingContext.persistentStoreCoordinator = cooridnator
+        // TODO persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        //persistingContext.persistentStoreCoordinator = cooridnator
         
         context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        context.parent = persistingContext
+        context.persistentStoreCoordinator = cooridnator
         
-        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        backgroundContext.parent = context
+        // TODO backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        //backgroundContext.parent = context
         
         // add a sqlite store located in the documents folder
         let filemanager = FileManager.default
@@ -73,3 +73,23 @@ struct CoreDataStack {
         }
     }
 }
+
+
+// MARK:  - Save data methods
+
+extension CoreDataStack {
+    
+    func saveContext() throws {
+        print("save called: \(context.hasChanges)")
+        if context.hasChanges {
+            try context.save()
+        }
+    }
+}
+
+
+
+
+
+
+
