@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import AddressBook
 import CoreData
 
 class TravelLocationsMapViewController: UIViewController {
@@ -110,7 +111,13 @@ class TravelLocationsMapViewController: UIViewController {
         } else if gestureState == UIGestureRecognizerState.ended {
             // if finger is lifted creat new instance of the Pin entity
             
-            let _ = Pin(latitude: coordinats.latitude, longitude: coordinats.longitude, title: "Test", context: fetchedResultsController!.managedObjectContext)
+            backwardGeocoding(coordinates: coordinats, completionHandlerBwdGeocoding: { (result, error) in
+                if error != nil {
+                    print("TODO alert geocoding failed, gonna use coordinates")
+                }
+                
+                let _ = Pin(latitude: coordinats.latitude, longitude: coordinats.longitude, title: result, context: self.fetchedResultsController!.managedObjectContext)
+            })
         }
     }
     
@@ -124,7 +131,7 @@ class TravelLocationsMapViewController: UIViewController {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
             annotation.title = pin.title
-            //annotation.subtitle = pin.creationDaten to do date formater
+            annotation.subtitle = "visited \(getShortDateString(date: pin.creationDate!))"
             mapView.addAnnotation(annotation)
         }
     }
@@ -160,6 +167,41 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
         print("TODO segue to photo album")
     }
     
+    // MARK: Map Helpers
+    
+    func backwardGeocoding(coordinates: CLLocationCoordinate2D, completionHandlerBwdGeocoding: @escaping (_ locationDiscription: String, _ error: Error?) -> Void) {
+        let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
+        CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
+            guard let placemark = placemarks?.first else {
+                // if no placemark was found return the error and use cooridnates as description
+                completionHandlerBwdGeocoding("\(coordinates.latitude) \(coordinates.longitude)", error)
+                return
+            }
+            
+            // if an area of interest is available return it, otherwise build a string from the name, city and country. if this fails aswell return the coordinates
+            if let areaOfInterest = placemark.areasOfInterest?.first {
+                completionHandlerBwdGeocoding(areaOfInterest, nil)
+            } else {
+                var outputElements = [String]()
+                
+                if let name = placemark.name {
+                    outputElements.append(name)
+                }
+                if let city = placemark.addressDictionary?["City"] as? String {
+                    outputElements.append(city)
+                }
+                if let country = placemark.country {
+                    outputElements.append(country)
+                }
+                
+                if outputElements.count > 0 {
+                    completionHandlerBwdGeocoding(outputElements.joined(separator: ", "), nil)
+                } else {
+                    completionHandlerBwdGeocoding("\(coordinates.latitude) \(coordinates.longitude)", nil)
+                }
+            }
+        }
+    }
     
     
     // MARK: Map presistency helper methods
@@ -229,7 +271,21 @@ extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
 }
 
 
+// MARK: helper methods
 
+extension TravelLocationsMapViewController {
+    
+    func getShortDateString(date: Date) -> String {
+        // return a short date string with the users local defaults
+        let dfmt = DateFormatter()
+        dfmt.dateStyle = .short
+        dfmt.timeStyle = .short
+        dfmt.doesRelativeDateFormatting = true
+        dfmt.locale = Locale.current
+        
+        return dfmt.string(from: date)
+    }
+}
 
 
 
