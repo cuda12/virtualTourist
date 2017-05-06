@@ -49,7 +49,7 @@ class TravelLocationsMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set default location and zoom if app was used before
+        // set default location and zoom, if app was used before
         if let prevRegionDict = UserDefaults.standard.dictionary(forKey: "prevRegion") {
             mapView.setRegion(getMapRegion(fromDict: prevRegionDict as! [String : Double]), animated: true)
         }
@@ -204,7 +204,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
     
     
-    // MARK: Map presistency helper methods
+    // MARK: Map persistency helper methods
     
     func storeMapViewRegion(_ region: MKCoordinateRegion) {
         UserDefaults.standard.set(getMapDict(fromRegion: region), forKey: "prevRegion")
@@ -227,6 +227,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     
     
     func getMapRegion(fromDict dict: [String: Double]) -> MKCoordinateRegion {
+        // converts a saved map dictionary back to a map region
         
         let span = MKCoordinateSpan(latitudeDelta: dict["latDelta"]!, longitudeDelta: dict["longDelta"]!)
         let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: dict["latCenter"]!, longitude: dict["longCenter"]!), span: span)
