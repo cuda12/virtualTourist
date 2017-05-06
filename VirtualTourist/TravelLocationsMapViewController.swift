@@ -94,13 +94,28 @@ class TravelLocationsMapViewController: UIViewController {
         
         
         if segue.identifier! == "showPhotoAlbum" {
-            print("showPhotoAlbum segue called")
-            if let photoAlbumVC = segue.destination as? PhotoAlbumCollectionViewController {
+            if let photoAlbumVC = segue.destination as? PhotoAlbumViewController {
+                print("showPhotoAlbum segue called")
                 
-                // inject pin into photoAlbumVC
-                photoAlbumVC.pin = nil // TODO
+                // get the coordinates of the selected pin annotation
+                let selectedPinCoordinates = (sender as! MKPointAnnotation).coordinate
+                
+                print("selected coordinates \(selectedPinCoordinates)")
+                
+                // compare the coordinates with the Pins array till match is found
+                var selectedPin: Pin?
+                for pin in pins {
+                    if pin.latitude == selectedPinCoordinates.latitude && pin.longitude == selectedPinCoordinates.longitude {
+                        selectedPin = pin
+                        break
+                    }
+                }
+                
+                // inject selected pin to photoAlbumVC
+                photoAlbumVC.pin = selectedPin
+                
+                // TODO catch error where no pin was found (should not occure)
             }
-            
         }
     }
     
@@ -181,10 +196,9 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("TODO segue to photo album")
         if control == view.rightCalloutAccessoryView {
-            print("TODO open photo album view")
-            performSegue(withIdentifier: "showPhotoAlbum", sender: control.tag)
+            // open Photo Album View
+            performSegue(withIdentifier: "showPhotoAlbum", sender: view.annotation)
         }
     }
     
