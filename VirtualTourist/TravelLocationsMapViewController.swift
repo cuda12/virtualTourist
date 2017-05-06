@@ -84,15 +84,25 @@ class TravelLocationsMapViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        
+        if segue.identifier! == "showPhotoAlbum" {
+            print("showPhotoAlbum segue called")
+            if let photoAlbumVC = segue.destination as? PhotoAlbumCollectionViewController {
+                
+                // inject pin into photoAlbumVC
+                photoAlbumVC.pin = nil // TODO
+            }
+            
+        }
     }
-    */
     
     
     @IBAction func droppedPinAction(_ sender: Any) {
@@ -174,6 +184,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
         print("TODO segue to photo album")
         if control == view.rightCalloutAccessoryView {
             print("TODO open photo album view")
+            performSegue(withIdentifier: "showPhotoAlbum", sender: control.tag)
         }
     }
     
