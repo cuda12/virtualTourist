@@ -20,7 +20,7 @@ class TravelLocationsMapViewController: UIViewController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    var pins = [Pin]()      // TODO init with previous stored pins
+    var pins = [Pin]()
     var pinNewAnnotation: MKPointAnnotation?
     
     // Porperty for fetchedResultsController
@@ -29,6 +29,7 @@ class TravelLocationsMapViewController: UIViewController {
             // whenever the fetchedResultsController changes, perform the fetch and reload the pin annotations
             fetchedResultsController?.delegate = self
             
+            // perform fetch
             do {
                 print("do fetch")
                 try fetchedResultsController?.performFetch()
@@ -36,13 +37,18 @@ class TravelLocationsMapViewController: UIViewController {
                 print("Error while trying to perform a search: \(error)")
             }
             
+            // reload pins
             self.reloadPins()
         }
     }
     
+    // MARK: Initializers
+    
+    // an initializer for swift interface with objective c protocol NSArchiving
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
     
     // MARK: Life cycle
     
@@ -97,7 +103,7 @@ class TravelLocationsMapViewController: UIViewController {
         let coordinats = mapView.convert(gestureLongPress.location(in: mapView), toCoordinateFrom: mapView)
         
         if gestureState == UIGestureRecognizerState.began {
-            // create a new pin and add it to the map view
+            // create a new pin annotation and add it to the map view
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinats
             
@@ -109,7 +115,7 @@ class TravelLocationsMapViewController: UIViewController {
             pinNewAnnotation?.coordinate = coordinats
         
         } else if gestureState == UIGestureRecognizerState.ended {
-            // if finger is lifted creat new instance of the Pin entity
+            // if finger is lifted create a new instance of the Pin entity
             
             backwardGeocoding(coordinates: coordinats, completionHandlerBwdGeocoding: { (result, error) in
                 if error != nil {
@@ -123,10 +129,10 @@ class TravelLocationsMapViewController: UIViewController {
     
     func reloadPins() {
         print(pins)
-        // remove all annootations to avoid any double annotations
+        // remove all annotations to avoid any double annotations
         mapView.removeAnnotations(mapView.annotations)
         
-        // add all pins
+        // add annotations for all pins
         for pin in pins {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
@@ -143,7 +149,7 @@ class TravelLocationsMapViewController: UIViewController {
 extension TravelLocationsMapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        // TODO decice if all region changes should be stored
+        // TODO decide if all region changes should be stored
         storeMapViewRegion(mapView.region)
     }
     
@@ -156,6 +162,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reusePinId)
             pinView!.canShowCallout = true
             pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         } else {
             pinView!.annotation = annotation
         }
@@ -165,6 +172,9 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         print("TODO segue to photo album")
+        if control == view.rightCalloutAccessoryView {
+            print("TODO open photo album view")
+        }
     }
     
     // MARK: Map Helpers
