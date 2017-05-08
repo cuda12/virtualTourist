@@ -20,6 +20,7 @@
 		A10E6A3E1E6D44D000F0AADE /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */; };
 		A158A2B01EBE037D00D3D296 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2AF1EBE037D00D3D296 /* PhotoAlbumViewController.swift */; };
 		A158A2B21EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */; };
+		A158A2B41EBE2D0800D3D296 /* FlickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2B31EBE2D0800D3D296 /* FlickerClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A158A2AF1EBE037D00D3D296 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		A158A2B31EBE2D0800D3D296 /* FlickerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickerClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				A10E6A381E6D44D000F0AADE /* Photo+CoreDataProperties.swift */,
 				A10E6A391E6D44D000F0AADE /* Pin+CoreDataClass.swift */,
 				A10E6A3A1E6D44D000F0AADE /* Pin+CoreDataProperties.swift */,
+				A158A2B31EBE2D0800D3D296 /* FlickerClient.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -97,7 +100,6 @@
 			children = (
 				A10E6A1C1E6C743700F0AADE /* TravelLocationsMapViewController.swift */,
 				A158A2AF1EBE037D00D3D296 /* PhotoAlbumViewController.swift */,
-				A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -105,6 +107,7 @@
 		A10E6A201E6CB26900F0AADE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */,
 				A10E6A0E1E6C735900F0AADE /* Main.storyboard */,
 				A10E6A111E6C735900F0AADE /* Assets.xcassets */,
 				A10E6A131E6C735900F0AADE /* LaunchScreen.storyboard */,
@@ -202,6 +205,7 @@
 				A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */,
 				A10E6A0B1E6C735900F0AADE /* AppDelegate.swift in Sources */,
 				A10E6A321E6CBC0F00F0AADE /* CoreDataStack.swift in Sources */,
+				A158A2B41EBE2D0800D3D296 /* FlickerClient.swift in Sources */,
 				A10E6A241E6CB3E100F0AADE /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

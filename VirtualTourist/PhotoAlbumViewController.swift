@@ -33,6 +33,17 @@ class PhotoAlbumViewController: UIViewController {
         
         // set layout of collection view cells
         setFlowLayout()
+        
+        
+        // load some pics for pin
+        FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
+            if let data = data {
+                print(data)
+                print("loaded image")
+            } else {
+                print(errorMsg!)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
