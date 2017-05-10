@@ -21,6 +21,7 @@
 		A158A2B01EBE037D00D3D296 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2AF1EBE037D00D3D296 /* PhotoAlbumViewController.swift */; };
 		A158A2B21EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */; };
 		A158A2B41EBE2D0800D3D296 /* FlickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2B31EBE2D0800D3D296 /* FlickerClient.swift */; };
+		A158A2BC1EC3AED400D3D296 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A158A2BB1EC3AED400D3D296 /* GCDBlackBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		A158A2AF1EBE037D00D3D296 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		A158A2B11EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		A158A2B31EBE2D0800D3D296 /* FlickerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickerClient.swift; sourceTree = "<group>"; };
+		A158A2BB1EC3AED400D3D296 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		A10E6A091E6C735900F0AADE /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				A158A2BB1EC3AED400D3D296 /* GCDBlackBox.swift */,
 				A10E6A0A1E6C735900F0AADE /* AppDelegate.swift */,
 				A10E6A211E6CB27900F0AADE /* Supporting Files */,
 				A10E6A201E6CB26900F0AADE /* Views */,
@@ -200,6 +203,7 @@
 				A158A2B21EBE0ACA00D3D296 /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				A10E6A3E1E6D44D000F0AADE /* Pin+CoreDataProperties.swift in Sources */,
 				A158A2B01EBE037D00D3D296 /* PhotoAlbumViewController.swift in Sources */,
+				A158A2BC1EC3AED400D3D296 /* GCDBlackBox.swift in Sources */,
 				A10E6A3B1E6D44D000F0AADE /* Photo+CoreDataClass.swift in Sources */,
 				A10E6A3D1E6D44D000F0AADE /* Pin+CoreDataClass.swift in Sources */,
 				A10E6A1D1E6C743700F0AADE /* TravelLocationsMapViewController.swift in Sources */,

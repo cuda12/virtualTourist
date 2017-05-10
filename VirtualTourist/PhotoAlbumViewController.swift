@@ -79,7 +79,7 @@ class PhotoAlbumViewController: UIViewController {
     // MARK: Load photo album actions
     
     private func loadNewPhotoAlbumForLoaction() {
-        // TODO
+        // TODO disable view - download view
         print("get a new photo album")
         
         // get Image URLs from Flicker
@@ -88,29 +88,48 @@ class PhotoAlbumViewController: UIViewController {
                 print(data)
                 print("loaded images URL")
                 
+                // add placeholders
+                performUIUpdatesOnMain {
+                    self.numberOfPlaceholders = data.count
+                    self.photoCollectionView.reloadData()
+                }
+                
+                // drop all images from current pin
+                // TODO
+                
+                // download images in background and add to pin
+                self.downloadImagesInBackground(data)
+                
+                // reload the collection's view content
+
+                
             } else {
                 print(errorMsg!)
             }
         }
+    }
+    
+    private func downloadImagesInBackground(_ photoUrls: [String]) {
         
-        // add placeholders
-        
-        // drop all images from current pin
-        
-        // download images in background and add to pin
-        
-        // reload the collection's view content
-        
+        appDelegate.stack.performBackgroundBatchOperation { (workerContext) in
+            
+            for photoUrl in photoUrls {
+                print("Ill download the image from \(photoUrl)")
+                
+                if let imageData = try? Data(contentsOf: URL(string: photoUrl)!) {
+                    let photo = Photo(imageData: imageData as NSData, context: workerContext)
+                    print(self.pin)
+                    photo.pin = self.pin
+                }
+            }
+        }
     }
     
     
     @IBAction func loadNewCollection(_ sender: Any) {
-        
         print("Gonna load a new collection")
-        
         loadNewPhotoAlbumForLoaction()
     }
-    
 }
 
 // MARK: NSFetchedResultsControllerDelagete methods

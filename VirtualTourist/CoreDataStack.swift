@@ -65,11 +65,33 @@ struct CoreDataStack {
         
         // options for migration
         let migrationOptions = [NSInferMappingModelAutomaticallyOption: true,
-                       NSMigratePersistentStoresAutomaticallyOption: true]
+                                NSMigratePersistentStoresAutomaticallyOption: true]
         do {
             try cooridnator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbUrl, options: migrationOptions)
         } catch {
             print("unable to add store at \(dbUrl)")
+        }
+    }
+}
+
+// MARK: - CoreDataStack (Batch Processing in the Background)
+
+extension CoreDataStack {
+    
+    typealias Batch = (_ workerContext: NSManagedObjectContext) -> ()
+    
+    func performBackgroundBatchOperation(_ batch: @escaping Batch) {
+        
+        backgroundContext.perform {
+            
+            batch(self.backgroundContext)
+            
+            // save it to the parent context, so narmal saving can work
+            do {
+                try self.backgroundContext.save()
+            } catch {
+                fatalError("Error while saving backgroundContext: \(error)")
+            }
         }
     }
 }
