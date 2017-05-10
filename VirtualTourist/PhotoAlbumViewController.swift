@@ -8,17 +8,36 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbumViewController: UIViewController {
     
     // MARK: Members
     
     var pin: Pin!
+    var numberOfPlaceholders = 0
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
+    // Porperty for fetchedResultsController
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>? {
+        didSet {
+            // whenever the fetchedResultsController changes, perform the fetch
+            fetchedResultsController?.delegate = self
+            
+            // perform fetch
+            do {
+                print("do fetch")
+                try fetchedResultsController?.performFetch()
+            } catch let error as NSError {
+                print("Error while trying to perform a search: \(error)")
+            }
+        }
+    }
     
     // MARK: Life cycle
     
@@ -33,17 +52,6 @@ class PhotoAlbumViewController: UIViewController {
         
         // set layout of collection view cells
         setFlowLayout()
-        
-        
-        // load some pics for pin
-        FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
-            if let data = data {
-                print(data)
-                print("loaded image")
-            } else {
-                print(errorMsg!)
-            }
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,25 +62,110 @@ class PhotoAlbumViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // reload data
-        photoCollectionView.reloadData()
+        // TODO if pin contains photos load them
+        
+        if (pin.photos?.count)! > 0 {
+            print("reloading previously stored images")
+            
+            // reload previously stored data
+            photoCollectionView.reloadData()
+        } else {
+            // get a new photoalbum
+            loadNewPhotoAlbumForLoaction()
+        }
+    }
+    
+    
+    // MARK: Load photo album actions
+    
+    private func loadNewPhotoAlbumForLoaction() {
+        // TODO
+        print("get a new photo album")
+        
+        // get Image URLs from Flicker
+        FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
+            if let data = data {
+                print(data)
+                print("loaded images URL")
+                
+            } else {
+                print(errorMsg!)
+            }
+        }
+        
+        // add placeholders
+        
+        // drop all images from current pin
+        
+        // download images in background and add to pin
+        
+        // reload the collection's view content
+        
+    }
+    
+    
+    @IBAction func loadNewCollection(_ sender: Any) {
+        
+        print("Gonna load a new collection")
+        
+        loadNewPhotoAlbumForLoaction()
+    }
+    
+}
+
+// MARK: NSFetchedResultsControllerDelagete methods
+
+extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("controller will change content")
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        print("ns fetched results controller delegate did change method called")
+        
+        // todo switch type to add, remove or insert pins
+        print("Todo")
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("controller did change content")
+        // TODO reload data
+        // TODOself.appDelegate.stack.save()
     }
 }
+
 
 // MARK: Collection View data source
 
 extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // TODO count
-        return 12
+        // if pin does not contain any images - load number of placeholders (initially equal to zero)
+        guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > 0 else {
+            print("laod \(numberOfPlaceholders) placeholders")
+            return numberOfPlaceholders
+        }
+        
+        print("load \(numberOfPhotos) actual photos")
+        return numberOfPhotos
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoAlbumCell", for: indexPath) as! PhotoAlbumCollectionViewCell
         
-        // TODO placeholder
-        cell.imageView.image = UIImage(named: "placeholderImg")
+        // load placeholders if no photos loaded yet
+        guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > 0 else {
+            print("add placeholder")
+            cell.imageView.image = UIImage(named: "placeholderImg")
+            return cell
+        }
+        
+        let photo = fetchedResultsController?.object(at: indexPath) as! Photo
+        print("add image")
+        cell.imageView.image = UIImage(data: photo.imageData! as Data)
+        
         return cell
     }
     

@@ -92,7 +92,6 @@ class TravelLocationsMapViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        
         if segue.identifier! == "showPhotoAlbum" {
             if let photoAlbumVC = segue.destination as? PhotoAlbumViewController {
                 print("showPhotoAlbum segue called")
@@ -111,10 +110,24 @@ class TravelLocationsMapViewController: UIViewController {
                     }
                 }
                 
+                // TODO catch error where no pin was found (should not occure)
+                
+                
+                // get the fetched results controller, while filtering out only the photos assigned to the selected pin
+                
+                // create the fetch request
+                let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+                fr.sortDescriptors = [NSSortDescriptor(key: "imageData", ascending: true)]
+                
+                let pred = NSPredicate(format: "pin = %@", argumentArray: [selectedPin!])
+                fr.predicate = pred
+                
+                // create the fetched results controller
+                let fc = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: fetchedResultsController!.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+                
                 // inject selected pin to photoAlbumVC
                 photoAlbumVC.pin = selectedPin
-                
-                // TODO catch error where no pin was found (should not occure)
+                photoAlbumVC.fetchedResultsController = fc
             }
         }
     }

@@ -111,7 +111,11 @@
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="AFd-vG-L1P"/>
-                                    <barButtonItem title="New Collection" id="5cP-RS-Kth"/>
+                                    <barButtonItem title="New Collection" id="5cP-RS-Kth">
+                                        <connections>
+                                            <action selector="loadNewCollection:" destination="cMe-q8-d6g" id="xO7-16-Be4"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="odz-e8-JWy"/>
                                 </items>
                             </toolbar>
