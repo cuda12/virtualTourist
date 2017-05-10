@@ -19,8 +19,8 @@ struct CoreDataStack {
     private let cooridnator: NSPersistentStoreCoordinator
     private let modelUrl: URL
     private let dbUrl: URL
-    //private let persistingContext: NSManagedObjectContext
-    //private let backgroundContext: NSManagedObjectContext
+    let persistingContext: NSManagedObjectContext
+    let backgroundContext: NSManagedObjectContext
     let context: NSManagedObjectContext
     
     
@@ -46,14 +46,14 @@ struct CoreDataStack {
         cooridnator = NSPersistentStoreCoordinator(managedObjectModel: model)
         
         // create the contexts and connect them to the coordinator
-        // TODO persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        //persistingContext.persistentStoreCoordinator = cooridnator
+        persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        persistingContext.persistentStoreCoordinator = cooridnator
         
         context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        context.persistentStoreCoordinator = cooridnator
+        context.parent = persistingContext
         
-        // TODO backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        //backgroundContext.parent = context
+        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        backgroundContext.parent = context
         
         // add a sqlite store located in the documents folder
         let filemanager = FileManager.default
@@ -78,11 +78,51 @@ struct CoreDataStack {
 // MARK:  - Save data methods
 
 extension CoreDataStack {
+    func save() {
+        context.performAndWait() {
+            if self.context.hasChanges {
+                do {
+                    try self.context.save()
+                } catch {
+                    fatalError("error while saving main context: \(error)")
+                }
+                
+                // now we save in the background
+                self.persistingContext.perform() {
+                    do {
+                        try self.persistingContext.save()
+                    } catch {
+                        fatalError("error whil saving persisting context: \(error)")
+                    }
+                }
+            }
+        }
+    }
     
-    func saveContext() throws {
-        print("save called: \(context.hasChanges)")
-        if context.hasChanges {
-            try context.save()
+    /* - move saving to persistingContext
+     func saveContext() throws {
+     if context.hasChanges {
+     try context.save()
+     }
+     }*/
+    
+    // TODO decide if autoSave necessary
+    func autoSave(_ delayInSeconds : Int) {
+        
+        if delayInSeconds > 0 {
+            do {
+                try self.context.save()
+                print("Autosaving")
+            } catch {
+                print("Error while autosaving")
+            }
+            
+            let delayInNanoSeconds = UInt64(delayInSeconds) * NSEC_PER_SEC
+            let time = DispatchTime.now() + Double(Int64(delayInNanoSeconds)) / Double(NSEC_PER_SEC)
+            
+            DispatchQueue.main.asyncAfter(deadline: time) {
+                self.autoSave(delayInSeconds)
+            }
         }
     }
 }

@@ -298,11 +298,7 @@ extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
         print("controller did change content")
         self.reloadPins()
         
-        do {
-            try self.appDelegate.stack.saveContext()
-        } catch {
-            print("Error during saving")
-        }
+        self.appDelegate.stack.save()
     }
 }
 
