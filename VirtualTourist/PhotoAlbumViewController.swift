@@ -94,12 +94,7 @@ class PhotoAlbumViewController: UIViewController {
                     self.photoCollectionView.reloadData()
                 }
                 
-                // drop all images from current pin
-                // TODO
-                
-                // download images in background and add to pin
-//                self.downloadImagesInBackground(data, forPin: self.pin)
-                
+                // actually download images from the received url
                 for photoUrl in data {
                     print("Ill download the image from \(photoUrl)")
                     
@@ -117,23 +112,6 @@ class PhotoAlbumViewController: UIViewController {
             }
         }
     }
-    
-    /* TODO delete this
-    private func downloadImagesInBackground(_ photoUrls: [String], forPin pin: Pin) {
-        
-        appDelegate.stack.performBackgroundBatchOperation { (workerContext) in
-            
-            for photoUrl in photoUrls {
-                print("Ill download the image from \(photoUrl)")
-                
-                if let imageData = try? Data(contentsOf: URL(string: photoUrl)!) {
-                    let photo = Photo(imageData: imageData as NSData, context: workerContext)
-                    photo.pin = pin
-                }
-            }
-        }
-    }
-    */
     
     private func deletePhotoAlbum() {
         print("Drop all images")
