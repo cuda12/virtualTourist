@@ -25,6 +25,7 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var activityIndicatorLabel: UILabel!
     @IBOutlet weak var buttonNewCollection: UIBarButtonItem!
+    @IBOutlet weak var labelNoImages: UILabel!
     
     // Porperty for fetchedResultsController
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>? {
@@ -65,7 +66,7 @@ class PhotoAlbumViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // enable view
+        // set-up view
         enableView(enable: true)
         
         // check if pin has perviously stored photos, otherwise load a new set
@@ -87,7 +88,7 @@ class PhotoAlbumViewController: UIViewController {
         // disable view, show download indication
         enableView(enable: false)
         
-        // get Image URLs from Flicker
+        // get Image URLs from Flickr
         FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
             if let data = data {
                 print(data)
@@ -114,7 +115,11 @@ class PhotoAlbumViewController: UIViewController {
                     }
                 }
             } else {
-                print(errorMsg!)
+                if errorMsg! == "No Images found" {
+                    self.showAlert(title: "No images found for pin", details: "head to the pin's location an post some pics on Flickr, then generate a new collection")
+                } else {
+                    self.showAlert(title: "Error connecting to Flickr", details: "make sure you are connected to the internet")
+                }
             }
             
             // housekeeping
@@ -149,6 +154,18 @@ class PhotoAlbumViewController: UIViewController {
         activityIndicator.isHidden = enable
         activityIndicatorLabel.isHidden = enable
         buttonNewCollection.isEnabled = enable
+    }
+    
+    // MARK: Alert Controller
+    
+    func showAlert(title: String, details: String) {
+        let alertController = UIAlertController()
+        
+        alertController.title = title
+        alertController.message = details
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel))
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -185,10 +202,13 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // if pin does not contain any images - load number of placeholders (initially equal to zero)
         guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > numberOfPlaceholders else {
+            labelNoImages.isHidden = numberOfPlaceholders == 0 ? false : true
+            
             print("laod \(numberOfPlaceholders) placeholders")
             return numberOfPlaceholders
         }
         
+        labelNoImages.isHidden = true
         print("load \(numberOfPhotos) actual photos")
         return numberOfPhotos
     }

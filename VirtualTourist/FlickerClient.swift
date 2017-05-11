@@ -26,7 +26,7 @@ class FlickerClient {
                 return
             }
             
-            // select a random page (only first 4000 returned from flickr api)
+            // select a random page (only first 4000 pics returned from flickr api)
             guard let pages = photoData[Constants.FlickrResponseKeys.Pages] as? Int, pages > 0 else {
                 completionHandler(nil, "Error no pages found in request")
                 return

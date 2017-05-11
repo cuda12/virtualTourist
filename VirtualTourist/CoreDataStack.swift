@@ -76,6 +76,8 @@ struct CoreDataStack {
 
 // MARK: - CoreDataStack (Batch Processing in the Background)
 
+// TODO backgroundContext needed?
+
 extension CoreDataStack {
     
     typealias Batch = (_ workerContext: NSManagedObjectContext) -> ()
@@ -121,12 +123,6 @@ extension CoreDataStack {
         }
     }
     
-    /* - move saving to persistingContext
-     func saveContext() throws {
-     if context.hasChanges {
-     try context.save()
-     }
-     }*/
     
     // TODO decide if autoSave necessary
     func autoSave(_ delayInSeconds : Int) {

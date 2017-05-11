@@ -127,6 +127,12 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No images loaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PYR-QT-8ee">
+                                <rect key="frame" x="88" y="354" width="144.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="18"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -143,8 +149,10 @@
                             <constraint firstItem="cQy-Gq-kvM" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="a4Z-aV-WI7"/>
                             <constraint firstItem="MxZ-oh-orf" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="c4M-73-7gd"/>
                             <constraint firstItem="6v1-cz-bi0" firstAttribute="leading" secondItem="rE8-YF-gfL" secondAttribute="leadingMargin" constant="-16" id="d3u-mX-6Ag"/>
+                            <constraint firstItem="PYR-QT-8ee" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="f7K-34-n9g"/>
                             <constraint firstItem="6v1-cz-bi0" firstAttribute="top" secondItem="spC-2R-yQd" secondAttribute="bottom" id="jQX-hd-sWU"/>
                             <constraint firstItem="spC-2R-yQd" firstAttribute="height" secondItem="rE8-YF-gfL" secondAttribute="height" multiplier="1:4" id="s8V-zc-CgJ"/>
+                            <constraint firstItem="PYR-QT-8ee" firstAttribute="centerY" secondItem="6v1-cz-bi0" secondAttribute="centerY" id="sSh-zW-rmu"/>
                         </constraints>
                     </view>
                     <connections>
@@ -152,6 +160,7 @@
                         <outlet property="activityIndicatorLabel" destination="ctL-vs-weA" id="BCq-lH-Axd"/>
                         <outlet property="buttonNewCollection" destination="5cP-RS-Kth" id="M4d-fg-Ilg"/>
                         <outlet property="flowLayout" destination="TGN-7P-5og" id="tD2-nq-UPN"/>
+                        <outlet property="labelNoImages" destination="PYR-QT-8ee" id="SX9-Zc-leK"/>
                         <outlet property="mapView" destination="spC-2R-yQd" id="LsW-MV-KaF"/>
                         <outlet property="photoCollectionView" destination="6v1-cz-bi0" id="lJN-Yc-YgB"/>
                     </connections>
