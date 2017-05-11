@@ -234,7 +234,7 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
         
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reusePinId)
-            pinView!.canShowCallout = false
+            pinView!.canShowCallout = true
             pinView!.pinTintColor = .red
         } else {
             pinView!.annotation = annotation
@@ -249,9 +249,11 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
         let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long)
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinates
-        // TODO decide if title and subtitle wanted
+        annotation.title = pin.title
+        annotation.subtitle = "visited \(getShortDateString(date: pin.creationDate!))"
         
         mapView.addAnnotation(annotation)
+        mapView.selectAnnotation(annotation, animated: true)
         
         // set region
         let regionRadius: CLLocationDistance = 2000         // in meters
@@ -259,4 +261,19 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
         
         mapView.setRegion(coordinateRegion, animated: true)
     }
+    
+    
+    // MARK: helper methods
+    
+    func getShortDateString(date: Date) -> String {
+        // return a short date string with the users local defaults
+        let dfmt = DateFormatter()
+        dfmt.dateStyle = .short
+        dfmt.timeStyle = .short
+        dfmt.doesRelativeDateFormatting = true
+        dfmt.locale = Locale.current
+        
+        return dfmt.string(from: date)
+    }
 }
+
