@@ -26,17 +26,13 @@ class FlickerClient {
                 return
             }
             
-            // select a random page (only first 4000 pics returned from flickr api)
+            // select a random page (only first 4000 pics returned from flickr api, and 250 returned per page with bbox option)
             guard let pages = photoData[Constants.FlickrResponseKeys.Pages] as? Int, pages > 0 else {
                 completionHandler(nil, "Error no pages found in request")
                 return
             }
-            
             let indexRandomPage = Int(arc4random_uniform(UInt32(min(pages, 16) - 1))) + 1
-            
-            print("index random page \(indexRandomPage)")
-            
-            
+    
             // get Image URL for x random images from selected page
             self.getImageUrlsFromFlickr(forLat: lat, forLong: long, atPage: indexRandomPage, completionHandler: { (photoData, errorMsg) in
                 
@@ -61,7 +57,7 @@ class FlickerClient {
                         photoUrls.append(photoUrl)
                     }
                 }
-                
+    
                 completionHandler(photoUrls, nil)
             })
         }

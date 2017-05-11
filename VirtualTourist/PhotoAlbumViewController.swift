@@ -35,7 +35,6 @@ class PhotoAlbumViewController: UIViewController {
             
             // perform fetch
             do {
-                print("do fetch")
                 try fetchedResultsController?.performFetch()
             } catch let error as NSError {
                 print("Error while trying to perform a search: \(error)")
@@ -48,10 +47,7 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
-        print("photo album for \(pin) loaded")
-    
+        // init map view
         addLocationPinAndCenter(atLat: pin.latitude, atLong: pin.longitude)
         
         // set layout of collection view cells
@@ -71,8 +67,6 @@ class PhotoAlbumViewController: UIViewController {
         
         // check if pin has perviously stored photos, otherwise load a new set
         if (pin.photos?.count)! > 0 {
-            print("reloading previously stored images")
-            
             // reload previously stored data
             photoCollectionView.reloadData()
         } else {
@@ -91,8 +85,6 @@ class PhotoAlbumViewController: UIViewController {
         // get Image URLs from Flickr
         FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
             if let data = data {
-                print(data)
-                print("loaded images URL")
                 
                 // add placeholders
                 performUIUpdatesOnMain {
@@ -102,8 +94,6 @@ class PhotoAlbumViewController: UIViewController {
                 
                 // actually download images from the received url
                 for photoUrl in data {
-                    print("Ill download the image from \(photoUrl)")
-                    
                     if let imageData = try? Data(contentsOf: URL(string: photoUrl)!) {
                         let photo = Photo(imageData: imageData as NSData, context: self.appDelegate.stack.context)
                         photo.pin = self.pin
@@ -134,18 +124,15 @@ class PhotoAlbumViewController: UIViewController {
         }
     }
     
-    private func deletePhotoAlbum() {
-        print("Drop all images")
-        
+    @IBAction func loadNewCollection(_ sender: Any) {
+        // delete all previous assigned photos
         pin.removeFromPhotos(pin.photos!)
         numberOfPlaceholders = 0
-    }
-    
-    @IBAction func loadNewCollection(_ sender: Any) {
-        deletePhotoAlbum()
-        print("Gonna load a new collection")
+        
+        // load new photo collection
         loadNewPhotoAlbumForLoaction()
     }
+    
     
     // MARK: UI Helper
     
@@ -189,13 +176,10 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         // if pin does not contain any images - load number of placeholders (initially equal to zero)
         guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > numberOfPlaceholders else {
             labelNoImages.isHidden = numberOfPlaceholders == 0 ? false : true
-            
-            print("laod \(numberOfPlaceholders) placeholders")
             return numberOfPlaceholders
         }
         
         labelNoImages.isHidden = true
-        print("load \(numberOfPhotos) actual photos")
         return numberOfPhotos
     }
     
@@ -203,15 +187,12 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoAlbumCell", for: indexPath) as! PhotoAlbumCollectionViewCell
         
         // load placeholders if photo is not available yet
-        
         let numberOfPhotos = pin.photos?.count ?? 0
         
         if indexPath.row < numberOfPhotos {
-            print("add image")
             let photo = fetchedResultsController?.object(at: indexPath) as! Photo
             cell.imageView.image = UIImage(data: photo.imageData! as Data)
         } else {
-            print("add placeholder")
             cell.imageView.image = UIImage(named: "placeholderImg")
         }
         

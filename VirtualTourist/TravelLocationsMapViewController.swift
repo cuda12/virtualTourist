@@ -31,7 +31,6 @@ class TravelLocationsMapViewController: UIViewController {
             
             // perform fetch
             do {
-                print("do fetch")
                 try fetchedResultsController?.performFetch()
             } catch let error as NSError {
                 print("Error while trying to perform a search: \(error)")
@@ -94,8 +93,6 @@ class TravelLocationsMapViewController: UIViewController {
         
         if segue.identifier! == "showPhotoAlbum" {
             if let photoAlbumVC = segue.destination as? PhotoAlbumViewController {
-                print("showPhotoAlbum segue called")
-                
                 // get the selected pin
                 let selectedPin = sender as! Pin
                 
@@ -152,7 +149,6 @@ class TravelLocationsMapViewController: UIViewController {
     }
     
     func reloadPins() {
-        print(pins)
         // remove all annotations to avoid any double annotations
         mapView.removeAnnotations(mapView.annotations)
         
@@ -196,8 +192,6 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
         
         // get the coordinates of the selected pin annotation
         let selectedPinCoordinates = view.annotation!.coordinate
-        
-        print("selected coordinates \(selectedPinCoordinates)")
         
         // compare the coordinates with the Pins array till match is found
         var selectedPin: Pin?
