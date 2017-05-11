@@ -42,7 +42,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="cUQ-cl-caK">
                         <barButtonItem key="backBarButtonItem" title="OK" id="5Rb-So-wCt"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="trash" id="yZM-Bv-57R"/>
                     </navigationItem>
                     <connections>
                         <outlet property="gestureLongPress" destination="SwQ-if-Qhj" id="Mer-9e-BEO"/>
@@ -119,23 +118,39 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="odz-e8-JWy"/>
                                 </items>
                             </toolbar>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="MxZ-oh-orf">
+                                <rect key="frame" x="150" y="274" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="downloading photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ctL-vs-weA">
+                                <rect key="frame" x="95" y="302" width="130" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="spC-2R-yQd" firstAttribute="top" secondItem="dTn-oS-uXW" secondAttribute="bottom" id="7eT-sF-1VP"/>
                             <constraint firstItem="6v1-cz-bi0" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="8EJ-du-yT1"/>
+                            <constraint firstItem="ctL-vs-weA" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="Czw-NF-Cdo"/>
                             <constraint firstItem="cQy-Gq-kvM" firstAttribute="leading" secondItem="rE8-YF-gfL" secondAttribute="leadingMargin" constant="-16" id="ETe-fF-T7D"/>
+                            <constraint firstItem="MxZ-oh-orf" firstAttribute="centerY" secondItem="rE8-YF-gfL" secondAttribute="centerY" id="HOd-Sm-TqI"/>
                             <constraint firstItem="wJm-F6-WHo" firstAttribute="top" secondItem="cQy-Gq-kvM" secondAttribute="bottom" id="Isd-Ne-FL7"/>
                             <constraint firstItem="spC-2R-yQd" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="JXT-Je-1tj"/>
+                            <constraint firstItem="ctL-vs-weA" firstAttribute="top" secondItem="MxZ-oh-orf" secondAttribute="bottom" constant="8" id="Wsr-Jx-f0n"/>
                             <constraint firstItem="cQy-Gq-kvM" firstAttribute="top" secondItem="6v1-cz-bi0" secondAttribute="bottom" id="Wte-qP-s7V"/>
                             <constraint firstItem="spC-2R-yQd" firstAttribute="leading" secondItem="rE8-YF-gfL" secondAttribute="leadingMargin" constant="-16" id="YRL-mI-EyL"/>
                             <constraint firstItem="cQy-Gq-kvM" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="a4Z-aV-WI7"/>
+                            <constraint firstItem="MxZ-oh-orf" firstAttribute="centerX" secondItem="rE8-YF-gfL" secondAttribute="centerX" id="c4M-73-7gd"/>
                             <constraint firstItem="6v1-cz-bi0" firstAttribute="leading" secondItem="rE8-YF-gfL" secondAttribute="leadingMargin" constant="-16" id="d3u-mX-6Ag"/>
                             <constraint firstItem="6v1-cz-bi0" firstAttribute="top" secondItem="spC-2R-yQd" secondAttribute="bottom" id="jQX-hd-sWU"/>
                             <constraint firstItem="spC-2R-yQd" firstAttribute="height" secondItem="rE8-YF-gfL" secondAttribute="height" multiplier="1:4" id="s8V-zc-CgJ"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="MxZ-oh-orf" id="FSs-fl-0fG"/>
+                        <outlet property="activityIndicatorLabel" destination="ctL-vs-weA" id="BCq-lH-Axd"/>
+                        <outlet property="buttonNewCollection" destination="5cP-RS-Kth" id="M4d-fg-Ilg"/>
                         <outlet property="flowLayout" destination="TGN-7P-5og" id="tD2-nq-UPN"/>
                         <outlet property="mapView" destination="spC-2R-yQd" id="LsW-MV-KaF"/>
                         <outlet property="photoCollectionView" destination="6v1-cz-bi0" id="lJN-Yc-YgB"/>

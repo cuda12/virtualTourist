@@ -22,6 +22,9 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorLabel: UILabel!
+    @IBOutlet weak var buttonNewCollection: UIBarButtonItem!
     
     // Porperty for fetchedResultsController
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>? {
@@ -62,8 +65,10 @@ class PhotoAlbumViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // TODO if pin contains photos load them
+        // enable view
+        enableView(enable: true)
         
+        // check if pin has perviously stored photos, otherwise load a new set
         if (pin.photos?.count)! > 0 {
             print("reloading previously stored images")
             
@@ -79,8 +84,8 @@ class PhotoAlbumViewController: UIViewController {
     // MARK: Load photo album actions
     
     private func loadNewPhotoAlbumForLoaction() {
-        // TODO disable view - download view
-        print("get a new photo album")
+        // disable view, show download indication
+        enableView(enable: false)
         
         // get Image URLs from Flicker
         FlickerClient.sharedInstance.getImageUrls(forLat: pin.latitude, forLong: pin.longitude) { (data, errorMsg) in
@@ -108,12 +113,18 @@ class PhotoAlbumViewController: UIViewController {
                         self.photoCollectionView.reloadData()
                     }
                 }
-                
+            } else {
+                print(errorMsg!)
+            }
+            
+            // housekeeping
+            performUIUpdatesOnMain {
                 // reset placeholder counter to zero (hence if a photo delete no placeholder is added)
                 self.numberOfPlaceholders = 0
                 
-            } else {
-                print(errorMsg!)
+                // reenable view
+                self.enableView(enable: true)
+                
             }
         }
     }
@@ -129,6 +140,15 @@ class PhotoAlbumViewController: UIViewController {
         deletePhotoAlbum()
         print("Gonna load a new collection")
         loadNewPhotoAlbumForLoaction()
+    }
+    
+    // MARK: UI Helper
+    
+    func enableView(enable: Bool) {
+        view.alpha = enable ? 1.0 : 0.5
+        activityIndicator.isHidden = enable
+        activityIndicatorLabel.isHidden = enable
+        buttonNewCollection.isEnabled = enable
     }
 }
 
