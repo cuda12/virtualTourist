@@ -138,19 +138,14 @@ class PhotoAlbumViewController: UIViewController {
     private func deletePhotoAlbum() {
         print("Drop all images")
         
-        pin.photos = nil
+        pin.removeFromPhotos(pin.photos!)
         numberOfPlaceholders = 0
-        
-        //// BUG find a good way to delete images
-        
-        photoCollectionView.reloadData()
-        
     }
     
     @IBAction func loadNewCollection(_ sender: Any) {
+        deletePhotoAlbum()
         print("Gonna load a new collection")
-        //deletePhotoAlbum()
-        //loadNewPhotoAlbumForLoaction()
+        loadNewPhotoAlbumForLoaction()
     }
 }
 
