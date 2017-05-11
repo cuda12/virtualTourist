@@ -173,21 +173,7 @@ class PhotoAlbumViewController: UIViewController {
 
 extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("controller will change content")
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        print("ns fetched results controller delegate did change method called")
-        
-        // todo switch type to add, remove or insert pins TODO
-        print("Todo")
-    }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("controller did change content")
-        
         // reload data of collection view and store changes
         photoCollectionView.reloadData()
         appDelegate.stack.save()

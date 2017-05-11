@@ -96,22 +96,8 @@ class TravelLocationsMapViewController: UIViewController {
             if let photoAlbumVC = segue.destination as? PhotoAlbumViewController {
                 print("showPhotoAlbum segue called")
                 
-                // get the coordinates of the selected pin annotation
-                let selectedPinCoordinates = (sender as! MKPointAnnotation).coordinate
-                
-                print("selected coordinates \(selectedPinCoordinates)")
-                
-                // compare the coordinates with the Pins array till match is found
-                var selectedPin: Pin?
-                for pin in pins {
-                    if pin.latitude == selectedPinCoordinates.latitude && pin.longitude == selectedPinCoordinates.longitude {
-                        selectedPin = pin
-                        break
-                    }
-                }
-                
-                // TODO catch error where no pin was found (should not occure)
-                
+                // get the selected pin
+                let selectedPin = sender as! Pin
                 
                 // get the fetched results controller, while filtering out only the photos assigned to the selected pin
                 
@@ -119,7 +105,7 @@ class TravelLocationsMapViewController: UIViewController {
                 let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
                 fr.sortDescriptors = [NSSortDescriptor(key: "pin", ascending: true)]
                 
-                let pred = NSPredicate(format: "pin = %@", argumentArray: [selectedPin!])
+                let pred = NSPredicate(format: "pin = %@", argumentArray: [selectedPin])
                 fr.predicate = pred
                 
                 // create the fetched results controller
@@ -206,11 +192,28 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // check wich pin entity called the segue - if a valid pin is selected open photo ablum immediately
+        
+        // get the coordinates of the selected pin annotation
+        let selectedPinCoordinates = view.annotation!.coordinate
+        
+        print("selected coordinates \(selectedPinCoordinates)")
+        
+        // compare the coordinates with the Pins array till match is found
+        var selectedPin: Pin?
+        for pin in pins {
+            if pin.latitude == selectedPinCoordinates.latitude && pin.longitude == selectedPinCoordinates.longitude {
+                selectedPin = pin
+                break
+            }
+        }
+        
         // deselect annotation
         mapView.deselectAnnotation(view.annotation, animated: true)
         
-        // open Photo Album View immediately when pin was tapped
-        performSegue(withIdentifier: "showPhotoAlbum", sender: view.annotation)
+        if let selectedPin = selectedPin {
+            performSegue(withIdentifier: "showPhotoAlbum", sender: selectedPin)
+        }
     }
     
     
@@ -288,28 +291,16 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
 
 extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("controller will change content")
-    }
-    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        print("ns fetched results controller delegate did change method called")
-        
-        // todo switch type to add, remove or insert pins
-        switch type {
-        case .insert:
+        // insert pin into array
+        if type == .insert {
             self.pins.insert(anObject as! Pin, at: newIndexPath!.row)
-            print("added new pin \(self.pins)")
-        default:
-            print("TODO")
         }
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("controller did change content")
+        // reload pins and store contains
         self.reloadPins()
-        
         self.appDelegate.stack.save()
     }
 }
