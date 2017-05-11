@@ -118,7 +118,6 @@ class TravelLocationsMapViewController: UIViewController {
                 // create the fetch request
                 let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
                 fr.sortDescriptors = [NSSortDescriptor(key: "pin", ascending: true)]
-                // TODO check if this caused a bug!, NSSortDescriptor(key: "imageData", ascending: true)]
                 
                 let pred = NSPredicate(format: "pin = %@", argumentArray: [selectedPin!])
                 fr.predicate = pred
@@ -175,8 +174,6 @@ class TravelLocationsMapViewController: UIViewController {
         for pin in pins {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
-            annotation.title = pin.title
-            annotation.subtitle = "visited \(getShortDateString(date: pin.creationDate!))"
             mapView.addAnnotation(annotation)
         }
     }
@@ -188,7 +185,7 @@ class TravelLocationsMapViewController: UIViewController {
 extension TravelLocationsMapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        // TODO decide if all region changes should be stored
+        // make any region change persistent
         storeMapViewRegion(mapView.region)
     }
     
@@ -199,22 +196,20 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
         
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reusePinId)
-            pinView!.canShowCallout = true
+            pinView!.canShowCallout = false
             pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         } else {
             pinView!.annotation = annotation
         }
         
         return pinView
     }
-
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView {
-            // open Photo Album View
-            performSegue(withIdentifier: "showPhotoAlbum", sender: view.annotation)
-        }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // open Photo Album View immediately when pin was tapped
+        performSegue(withIdentifier: "showPhotoAlbum", sender: view.annotation)
     }
+    
     
     // MARK: Map Helpers
     
@@ -313,23 +308,6 @@ extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
         self.reloadPins()
         
         self.appDelegate.stack.save()
-    }
-}
-
-
-// MARK: helper methods
-
-extension TravelLocationsMapViewController {
-    
-    func getShortDateString(date: Date) -> String {
-        // return a short date string with the users local defaults
-        let dfmt = DateFormatter()
-        dfmt.dateStyle = .short
-        dfmt.timeStyle = .short
-        dfmt.doesRelativeDateFormatting = true
-        dfmt.locale = Locale.current
-        
-        return dfmt.string(from: date)
     }
 }
 
