@@ -102,10 +102,15 @@ class PhotoAlbumViewController: UIViewController {
                         let photo = Photo(imageData: imageData as NSData, context: self.appDelegate.stack.context)
                         photo.pin = self.pin
                     }
+                    
+                    // update collection view immediately
+                    performUIUpdatesOnMain {
+                        self.photoCollectionView.reloadData()
+                    }
                 }
                 
-                // reload the collection's view content - has to be update asap
-                // probably add this to context changed
+                // reset placeholder counter to zero (hence if a photo delete no placeholder is added)
+                self.numberOfPlaceholders = 0
                 
             } else {
                 print(errorMsg!)
@@ -159,7 +164,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // if pin does not contain any images - load number of placeholders (initially equal to zero)
-        guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > 0 else {
+        guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > numberOfPlaceholders else {
             print("laod \(numberOfPlaceholders) placeholders")
             return numberOfPlaceholders
         }
@@ -171,16 +176,18 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoAlbumCell", for: indexPath) as! PhotoAlbumCollectionViewCell
         
-        // load placeholders if no photos loaded yet
-        guard let numberOfPhotos = pin.photos?.count, numberOfPhotos > 0 else {
+        // load placeholders if photo is not available yet
+        
+        let numberOfPhotos = pin.photos?.count ?? 0
+        
+        if indexPath.row < numberOfPhotos {
+            print("add image")
+            let photo = fetchedResultsController?.object(at: indexPath) as! Photo
+            cell.imageView.image = UIImage(data: photo.imageData! as Data)
+        } else {
             print("add placeholder")
             cell.imageView.image = UIImage(named: "placeholderImg")
-            return cell
         }
-        
-        let photo = fetchedResultsController?.object(at: indexPath) as! Photo
-        print("add image")
-        cell.imageView.image = UIImage(data: photo.imageData! as Data)
         
         return cell
     }
@@ -189,7 +196,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     // MARK: Collection View Helper
     
     func setFlowLayout() {
-        let space: CGFloat = 3.0
+        let space: CGFloat = 2.0
         let dimension: CGFloat
         
         if UIDeviceOrientationIsPortrait(UIDevice.current.orientation) {
@@ -208,14 +215,9 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
 extension PhotoAlbumViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //let photo = pin.Photos[(indexPath as NSIndexPath).row]
-        
-        print("TODO delete photo at: \((indexPath as NSIndexPath).row)")
-        
+        // delete tapped images
         pin.removeFromPhotos(fetchedResultsController?.object(at: indexPath) as! Photo)
-        
     }
-    
 }
 
 
