@@ -173,7 +173,7 @@ extension FlickerClient {
         
         // MARK: Virtual Tourist
         
-        static let MaxNumbersImageToReturn = 50
+        static let MaxNumbersImageToReturn = 8
         
         // MARK: Flickr
         struct Flickr {

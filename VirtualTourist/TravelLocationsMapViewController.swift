@@ -117,7 +117,8 @@ class TravelLocationsMapViewController: UIViewController {
                 
                 // create the fetch request
                 let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
-                fr.sortDescriptors = [NSSortDescriptor(key: "imageData", ascending: true)]
+                fr.sortDescriptors = [NSSortDescriptor(key: "pin", ascending: true)]
+                // TODO check if this caused a bug!, NSSortDescriptor(key: "imageData", ascending: true)]
                 
                 let pred = NSPredicate(format: "pin = %@", argumentArray: [selectedPin!])
                 fr.predicate = pred

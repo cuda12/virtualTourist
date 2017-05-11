@@ -98,10 +98,19 @@ class PhotoAlbumViewController: UIViewController {
                 // TODO
                 
                 // download images in background and add to pin
-                self.downloadImagesInBackground(data)
+//                self.downloadImagesInBackground(data, forPin: self.pin)
                 
-                // reload the collection's view content
-
+                for photoUrl in data {
+                    print("Ill download the image from \(photoUrl)")
+                    
+                    if let imageData = try? Data(contentsOf: URL(string: photoUrl)!) {
+                        let photo = Photo(imageData: imageData as NSData, context: self.appDelegate.stack.context)
+                        photo.pin = self.pin
+                    }
+                }
+                
+                // reload the collection's view content - has to be update asap
+                // probably add this to context changed
                 
             } else {
                 print(errorMsg!)
@@ -109,7 +118,8 @@ class PhotoAlbumViewController: UIViewController {
         }
     }
     
-    private func downloadImagesInBackground(_ photoUrls: [String]) {
+    /* TODO delete this
+    private func downloadImagesInBackground(_ photoUrls: [String], forPin pin: Pin) {
         
         appDelegate.stack.performBackgroundBatchOperation { (workerContext) in
             
@@ -118,17 +128,29 @@ class PhotoAlbumViewController: UIViewController {
                 
                 if let imageData = try? Data(contentsOf: URL(string: photoUrl)!) {
                     let photo = Photo(imageData: imageData as NSData, context: workerContext)
-                    print(self.pin)
-                    photo.pin = self.pin
+                    photo.pin = pin
                 }
             }
         }
     }
+    */
     
+    private func deletePhotoAlbum() {
+        print("Drop all images")
+        
+        pin.photos = nil
+        numberOfPlaceholders = 0
+        
+        //// BUG find a good way to delete images
+        
+        photoCollectionView.reloadData()
+        
+    }
     
     @IBAction func loadNewCollection(_ sender: Any) {
         print("Gonna load a new collection")
-        loadNewPhotoAlbumForLoaction()
+        //deletePhotoAlbum()
+        //loadNewPhotoAlbumForLoaction()
     }
 }
 
@@ -144,14 +166,16 @@ extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
         
         print("ns fetched results controller delegate did change method called")
         
-        // todo switch type to add, remove or insert pins
+        // todo switch type to add, remove or insert pins TODO
         print("Todo")
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("controller did change content")
-        // TODO reload data
-        // TODOself.appDelegate.stack.save()
+        
+        // reload data of collection view and store changes
+        photoCollectionView.reloadData()
+        appDelegate.stack.save()
     }
 }
 
@@ -214,6 +238,9 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
         //let photo = pin.Photos[(indexPath as NSIndexPath).row]
         
         print("TODO delete photo at: \((indexPath as NSIndexPath).row)")
+        
+        pin.removeFromPhotos(fetchedResultsController?.object(at: indexPath) as! Photo)
+        
     }
     
 }
