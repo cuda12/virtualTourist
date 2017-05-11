@@ -206,6 +206,9 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // deselect annotation
+        mapView.deselectAnnotation(view.annotation, animated: true)
+        
         // open Photo Album View immediately when pin was tapped
         performSegue(withIdentifier: "showPhotoAlbum", sender: view.annotation)
     }
