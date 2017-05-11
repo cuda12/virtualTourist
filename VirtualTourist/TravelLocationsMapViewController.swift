@@ -138,29 +138,29 @@ class TravelLocationsMapViewController: UIViewController {
         let gestureState = (sender as! UILongPressGestureRecognizer).state
         
         // convert touch point within mapview to coordinates
-        let coordinats = mapView.convert(gestureLongPress.location(in: mapView), toCoordinateFrom: mapView)
+        let coordinates = mapView.convert(gestureLongPress.location(in: mapView), toCoordinateFrom: mapView)
         
         if gestureState == UIGestureRecognizerState.began {
             // create a new pin annotation and add it to the map view
             let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinats
+            annotation.coordinate = coordinates
             
             pinNewAnnotation = annotation
             mapView.addAnnotation(pinNewAnnotation!)
             
         } else if gestureState == UIGestureRecognizerState.changed {
             // let the user drag the pin around till the finger is lifted
-            pinNewAnnotation?.coordinate = coordinats
+            pinNewAnnotation?.coordinate = coordinates
         
         } else if gestureState == UIGestureRecognizerState.ended {
             // if finger is lifted create a new instance of the Pin entity
             
-            backwardGeocoding(coordinates: coordinats, completionHandlerBwdGeocoding: { (result, error) in
-                if error != nil {
-                    print("TODO alert geocoding failed, gonna use coordinates")
+            let pin = Pin(latitude: coordinates.latitude, longitude: coordinates.longitude, title: "\(coordinates.latitude) \(coordinates.longitude)", context: self.fetchedResultsController!.managedObjectContext)
+            
+            backwardGeocoding(coordinates: coordinates, completionHandlerBwdGeocoding: { (result, error) in
+                if error == nil {
+                    pin.title = result
                 }
-                
-                let _ = Pin(latitude: coordinats.latitude, longitude: coordinats.longitude, title: result, context: self.fetchedResultsController!.managedObjectContext)
             })
         }
     }
